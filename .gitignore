@@ -1,1 +1,4 @@
 **/.DS_Store
+**/.spyproject
+/Code Components
+__pycache__/

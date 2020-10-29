@@ -9,6 +9,15 @@ Created on Wed Oct 28 17:33:28 2020
 from cs_proj_functions import *
 import pandas as pd
 
+print("|| Global Warning Visualization Tool ||")
+print("CS 5010 Semester Project | Fall 2020")
+print("Authors:")
+print("Nima Beheshti (nb9pp)")
+print("Jess Cheu (jc4vg)")
+print("Ben Feciura (bmf3bw)")
+print("Gary Mitchell (gm3gq)")
+print()
+
 # Ask until the user provides a valid filename
 while True:
     try:
@@ -40,7 +49,12 @@ def print_menu():
         print(start_year)
     else:
         print("{0} to {1}".format(start_year, stop_year))
-    print("\n[1] Filter by Country\n[2] Filter by Year\n[3] Clear Filters\n[X] Produce Visualization\n[5] Export Data\n\n[0] Quit")    
+    print("\n[1] Filter by Country")
+    print("[2] Filter by Year")
+    print("[3] Clear Filters")
+    print("[4] Produce Visualization")
+    print("[5] Export Data\n")
+    print("[0] Quit")    
 
 
 def filter_country():
@@ -53,8 +67,8 @@ def filter_country():
     while True:
         print("\nIncluded Countries:")
         print(*country_filter, sep = ", ")
-        country = input("Enter another country (or if finished, enter Done): ")
-        if country == "Done":
+        country = input("Enter another country (or if finished, enter DONE): ")
+        if country == "DONE":
             break
         else:
             country_filter.append(country)
@@ -66,14 +80,18 @@ def filter_year():
     global data
     global start_year
     global stop_year
-    print("[1] Single Year\n[2] Range of Years")
+    print("[1] Single Year")
+    print("[2] Range of Years")
     selection = int(input("Please make a selection: "))
     if selection == 1:
         start_year = int(input("Enter year: "))
         stop_year = start_year
-    else:
+    elif selection == 2:
         start_year = int(input("Enter first year: "))
         stop_year = int(input("Enter last year: "))
+    else:
+        print("Invalid Selection.")
+        return
     data = subset_by_year(full_data, start_year, stop_year)
     if country_filter != ["All"]:
         data = subset_by_entity(data, country_filter)
@@ -104,20 +122,59 @@ def clear_filters():
             data = full_data
         else:
             data = subset_by_entity(data, country_filter)
-    else:
+    elif selection == 3:
         country_filter = ["All"]
         start_year = -1
         stop_year = -1
         data = full_data
+    else:
+        print("Invalid selection.")
+
+def produce_visualization(data, country_filter, start_year, stop_year):
+    print("Which type of visualization?")
+    print("[1] Pie Chart (Compare contributions of selected countries to")
+    print("    total global emissions for selected year)")
+    print("[2] Line Graph (Compare selected countries' emissions over")
+    print("    selected range of years)")
+    print()
+    selection = int(input("Please make a selection: "))
+    if selection == 1:
+        size_limit = 0
+        if country_filter == ["All"]:
+            countries = None
+            size_limit = int(input("Show __ largest contributors: "))
+        else:
+            countries = country_filter
+        if start_year == -1:
+            year = int(input("Please specify a year: "))
+        elif start_year != stop_year:
+            print("Multiple years selected.")
+            year = int(input("Please choose a year between {0} and {1}: ".format(start_year, stop_year)))
+        else:
+            year = start_year
+        save = input("Export visualization? [Y/N] ")
+        if save == "Y" or "y":
+            fn = input("Provide filename: ")
+        else:
+            fn = None
+        pie_chart(full_data, year, size_limit, countries, fn)
+    if selection == 2:
+        if country_filter == ["All"]:
+            print("Please filter by a subset of countries first.")
+            return
+        save = input("Export visualization? [Y/N] ")
+        if save.upper() == "Y":
+            fn = input("Provide filename: ")
+        else:
+            fn = None
+        line_plot(data, country_filter, data['Year'].min(), data['Year'].max(), data['Emissions'].max(), fn)
     return
     
 def export_subset(data):
     fn = input("Name of output file: ")
     data.to_csv(fn, index = False)
-    print("Exported {}".format(fn))
-    return
+    print("Exported {0}".format(fn))
   
-end_program = False
 while True:
     print_menu()
     selection = int(input("Please make a selection: "))
@@ -132,7 +189,7 @@ while True:
         clear_filters()
         entries = len(data)
     elif selection == 4:
-        continue
+        produce_visualization(data, country_filter, start_year, stop_year)
     elif selection == 5:
         export_subset(data)
     elif selection == 0:

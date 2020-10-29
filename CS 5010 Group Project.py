@@ -259,18 +259,28 @@ VISUALIZATION
 
 ### Heatmap or pie chart based on 2017 emission quantities
 ### Ben
-def pie_chart(dataframe, year, top_contributors = 25):
+def pie_chart(dataframe, year, size_limit = 25, countries = None):
+    
     subset = subset_by_year(dataframe, year)
     subset.sort_values(by = ['Emissions'], ascending = False, inplace = True)
     subset.reset_index(inplace = True, drop = True)
     labels = []
     slices = []
     other = 0
-    for i in range(top_contributors):
-        labels.append(subset['Entity'][i])
-        slices.append(subset['Emissions'][i])
-    for i in range(top_contributors, len(subset['Entity'])):
-        other += subset['Emissions'][i]
+    if countries == None:
+        for i in range(size_limit):
+            labels.append(subset['Entity'][i])
+            slices.append(subset['Emissions'][i])
+        for i in range(size_limit, len(subset['Entity'])):
+            other += subset['Emissions'][i]
+    else:
+        for i in range(len(subset['Entity'])):
+            if subset["Entity"][i] in countries:
+                labels.append(subset['Entity'][i])
+                slices.append(subset['Emissions'][i])
+            else:
+                other += subset['Emissions'][i]
+                
     slices.append(other)
     labels.append('Other')
 
@@ -280,7 +290,7 @@ def pie_chart(dataframe, year, top_contributors = 25):
 
     fig = plt.gcf()
     fig.set_size_inches(12,12)
-    fig.suptitle("Percentage of Global Emissions by Country in 2017 ({0} largest)".format(str(top_contributors)))
+    fig.suptitle("Percentage of Global Emissions by Country in 2017")
     plt.show()
     
 pie_chart(data_countries, 2017, 25)

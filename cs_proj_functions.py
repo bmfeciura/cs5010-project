@@ -1,9 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Oct 28 17:33:50 2020
+CS 5010 Project
 
-@author: benjaminfeciura
+"Global Warning"
+
+Nima Beheshti (nb9pp)
+Jess Cheu (jc4vg)
+Ben Feciura (bmf3bw)
+Gary Mitchell (gm3gq)
+
+FUNCTIONS
+This portion of the project contains the functions we have written to be
+reusable throughout the other portions of the project. These are related
+to subsetting data and producing visualizations.
+
 """
 
 import pandas as pd

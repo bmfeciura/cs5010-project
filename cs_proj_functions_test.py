@@ -1,9 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Oct 28 17:34:57 2020
+CS 5010 Project
 
-@author: benjaminfeciura
+"Global Warning"
+
+Nima Beheshti (nb9pp)
+Jess Cheu (jc4vg)
+Ben Feciura (bmf3bw)
+Gary Mitchell (gm3gq)
+
+UNIT TESTING
+This portion of the project contains the unit testing we performed on the
+functions we wrote to ensure they were subsetting and querying the data
+appropriately.
+
 """
 
 import unittest

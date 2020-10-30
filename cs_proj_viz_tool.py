@@ -1,9 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Oct 28 17:33:28 2020
+CS 5010 Project
 
-@author: benjaminfeciura
+"Global Warning"
+
+Nima Beheshti (nb9pp)
+Jess Cheu (jc4vg)
+Ben Feciura (bmf3bw)
+Gary Mitchell (gm3gq)
+
+VISUALIZATION TOOL
+This portion of the project allows the user to select what types of queries to
+perform on the data (by country and year) and produce appropriate
+visualizations.
+
 """
 
 from cs_proj_functions import *

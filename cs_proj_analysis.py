@@ -195,21 +195,7 @@ data_countries.to_csv("data_cleaned.csv", index = False)
 world.to_csv("world.csv", index = False)
 trans.to_csv("transport.csv", index = False)
 
-'''
-### Examine streaks of consecutive years of similar change.
-streak_double = [0]
-streak = 0
-for i in range(1, len(data_countries['Entity'])):
-    if data_countries['YoY_Pct_Change'][i] >= 100:
-        streak += 1
-    else:
-        streak = 0
-    streak_double.append(streak)
-    
-data_countries['Streak_Double'] = pd.Series(streak_double)
-print("\nSummary including new columns:\n")
-print(data_countries.describe())
-'''
+
 #-----------------------------------------------------------------------------
 '''
 SUBSETTING
@@ -281,13 +267,10 @@ for i in trans['Emissions']:
 world_total = []
 for i in world['Emissions']:
     world_total.append(i)
-#print(transport)
-#print(world_total)
 t = np.array(transport, dtype=np.float)
 wt = np.array(world_total, dtype=np.float)
 
 Percentage_of_total_emissions_from_international_transport = 100*(t/wt)
-#print(Percentage_of_total_emissions_from_international_transport)
 trans['% of world emissions'] = Percentage_of_total_emissions_from_international_transport
 print(trans)
 
@@ -296,47 +279,47 @@ print(trans)
 continents_filter = data.Entity.isin(['Africa', 'Americas (other)','Asia and Pacific (other)','Europe (other)','Australia','Antarctic Fisheries'])
 print(data[continents_filter])
 
+
+# Query to see how long it would take for individuals to combat US CO2 emissiosn in 2017, 2010, and 1950
+print(entityemissionsforyear("United States",2017, data_countries))
+print(entityemissionsforyear("United States",2010, data_countries))
+print(entityemissionsforyear("United States",1950, data_countries))
+
+# Query to see how long it would take for individuals to combat world CO2 emissiosn in 2017, 2010, and 1950
+print(entityemissionsforyear("World",2017,world))
+print(entityemissionsforyear("World",2010,world))
+print(entityemissionsforyear("World",1950,world))
+
+
+# Obtain world emissions data for the last 50 years
+worldlast50 = subset_by_year(world, world['Year'].max() - 50, world['Year'].max())
+last50years = worldlast50["Year"]
+totalemissionslast50 = worldlast50["Emissions"]
+np.polyfit(np.log(last50years), totalemissionslast50, 1)
+# array([ 8.74994891e+11, -6.62363734e+12])
+# estimated equation: y = 8.74994891e+11*log(x) - 6.62363734e+12
+# "Safe limit" possibly 100 - 500 billion metric tons of CO2/year
+# What is the estimated year we hit 100 billion metric tons of CO2 emissions 
+totalemissions = 100e9
+estimatedyear = np.exp((totalemissions + 6.62363734e+12)/8.74994891e+11)
+print(round(estimatedyear,0))
+
 #-----------------------------------------------------------------------------
 
 '''
 VISUALIZATION
 '''
 
-### Make sure to specify what subset of data is used for the visualization
-
 ### Pie chart based on 2017 emission quantities
     
 pie_chart(data_countries, 2017, size_limit = 25, fn = "2017global")
 
 ### Line plot of global emission over time
-### Gary
-
 world = data[(data['Entity'] == 'World')]
 world.plot(x = 'Year',y='Emissions')
 
 
-### Look at countries with decreasing emissions/rate of decrease
-### Jess
-### Look at countries with decreasing emissions/rate of decrease
-### Find a section of time where emissions generally decreased and look at the
-### top 5 emission countries over range of years
-### Decrease in the late 20s into the early 30s until beginning of WWII
-### Upspike until 1945 at the end it WWII
-
-### Find decreasing emissions for countries
-streak_decrease = [0]
-streak = 0
-for i in range(1, len(data_countries['Entity'])):
-    if data_countries['YoY_Pct_Change'][i] < 0:
-        streak += 1 
-    else:
-        streak = 0
-    streak_decrease.append(streak)
-    
-data_countries['Streak_Decrease'] = pd.Series(streak_decrease)
-#print("\nSummary including new Streak_Decrease column:\n")
-#print(data_countries.describe())
-
+### Plot of change during Great Depression and WWII
 ### Find years where global emissions fell over 20% to determine year range for graph 
 years_decrease = []
 for i in range(1,len(data_countries['Year'])):
@@ -368,7 +351,7 @@ Germanydf = countrydf('Germany')
 Francedf = countrydf('France')
 Canadadf = countrydf('Canada')
 
-### dataframe of all countries and world from 1927-1947
+### Create dataframe of all countries and world from 1927-1947
 def countrydfyr(dataframe):
     new_data = []
     for year in range(1927,1948):
@@ -385,7 +368,6 @@ Canada = countrydfyr(Canadadf)
 World = countrydfyr(world)
 dflst = [US, UK, Germany, France, Canada, World]
 years_decrease_df = pd.concat(dflst)
-#print(years_decrease_df)
 
 fig = plt.figure()
 ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
@@ -402,9 +384,34 @@ ax.set_xticklabels(range(1927,1948,3))
 plt.legend(loc=2, prop={'size': 7})
 plt.show()
 
+### Graph total emissions per continent over time
 
-### Significant Events
-### Nima
+Africa = data[continents_filter].loc[data['Entity'] == 'Africa']
+Americas = data[continents_filter].loc[data['Entity'] == 'Americas (other)']
+Asia = data[continents_filter].loc[data['Entity'] == 'Asia and Pacific (other)']
+Europe = data[continents_filter].loc[data['Entity'] == 'Europe (other)']
+Australia = data[continents_filter].loc[data['Entity'] == 'Australia']
+Antarctic = data[continents_filter].loc[data['Entity'] == 'Antarctic Fisheries']
+cntlst = [Africa, Americas, Asia, Europe, Australia, Antarctic]
+cntlst = pd.concat(cntlst)
+
+fig = plt.figure()
+ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+for framee in [Africa, Americas, Asia, Europe, Australia, Antarctic]:
+    plt.plot(framee['Year'], framee['Emissions'], label = framee['Entity'].iloc[0])
+    
+plt.xlim(1940,2017)
+plt.xlabel('Year')
+plt.ylabel('Emissions')
+plt.title('Continental Emissions over the Years')
+ax.set_xticks(range(1940,2017,10))
+ax.set_xticklabels(range(1940,2017,10))
+plt.legend(loc=2, prop={'size': 7})
+plt.show()
+
+
+### Change during a selection of significant world events
+
 # Syria during Civil War 2011-2017
 # Significant decrease in emissions
 syria_df = subset_by_year(subset_by_entity(data, 'Syria'), 2000,2017)

@@ -55,7 +55,7 @@ The result of data cleaning that was used in the majority of our analyses.
 In `/Subsets/` we have placed many of the data subsets that resulted from our investigations.
 
 ## Report and Presentation
-In `/Presentation/`, we have included copies of our written report (`Report.pdf`) and our long- and short-form visuals (`Slides.pdf` and `Slides_LIVE.pdf`) for the video presentation.
+In `/Report_and_Presentation/`, we have included copies of our written report (`Report.pdf`) and our long- and short-form visuals (`Slides.pdf` and `Slides_LIVE.pdf`) for the video presentation.
 
 ## Sources:
 [Original Data](https://www.kaggle.com/yoannboyere/co2-ghg-emissionsdata "Yoann Boyere on Kaggle")

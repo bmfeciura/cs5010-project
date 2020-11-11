@@ -35,7 +35,7 @@ to allow users to subset the data as they choose. With the subsetted data,
 they can produce their own visualizations and learn a bit more about the
 context for the data.
 
-Requires <cs_proj_functions.py> to run, and is designed to use the cleaned
+Requires `cs_proj_functions.py` to run, and is designed to use the cleaned
 version of the dataset, `data_cleaned.csv`, or any subset of this dataset.
 
 ### cs\_proj\_functions.py

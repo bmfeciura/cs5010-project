@@ -13,17 +13,24 @@ We hoped to learn about some of the major events that influence emissions as
 well as to get a better perspective on the current state of the emissions
 issue.
 
+We gained a better context for the issue of emissions as a whole and gained valuable experience in carrying out the data science process including validation, testing, user experience design, and visualization.
+
+![Percent share of global emissions in 2017.](/Visualization_Output/2017global.png "Percent share of global emissions in 2017.")
+
+![Historical data for continents](/Visualization_Output/continents_historical.png "Historical data for continents")
+
+
 ## Descriptions of Files
 ### cs\_proj\_analysis.py
-`cs_proj_analysis.py` includes the data cleaning and analysis we performed
+Includes the data cleaning and analysis we performed
 as part of our own investigations, and from which the information discussed
 in our results section originated.
 
 Requires `cs_proj_functions.py` to run. Visualization results can be found in
-`/Visualization Output/`.
+`/Visualization_Output/`.
 
 ### cs\_proj\_viz\_tool.py
-`cs_proj_viz_tool.py` is the user-oriented visualization tool we designed
+The user-oriented visualization tool we designed
 to allow users to subset the data as they choose. With the subsetted data,
 they can produce their own visualizations and learn a bit more about the
 context for the data.
@@ -32,11 +39,11 @@ Requires <cs_proj_functions.py> to run, and is designed to use the cleaned
 version of the dataset, `data_cleaned.csv`, or any subset of this dataset.
 
 ### cs\_proj\_functions.py
-`cs_proj_functions.py` contains functions we built to use throughout the
+Contains functions we built to use throughout the
 project.
 
 ### cs\_proj\_functions\_test.py
-`cs_proj_functions_test.py` contains unit tests used to validate `cs_proj_functions.py`.
+Contains unit tests used to validate `cs_proj_functions.py`.
 
 ### co2\_emission.csv
 The raw dataset for our project.
